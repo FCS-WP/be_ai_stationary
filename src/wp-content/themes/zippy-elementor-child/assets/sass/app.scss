@@ -1,0 +1,57 @@
+body {
+    &.home {
+        min-height: 100vh;
+
+        #header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        #footer {
+            @media screen and (min-width: 991px) {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+            }
+        }
+    }
+}
+
+#student_form {
+    .select-caret-down-wrapper {
+        svg {
+            display: none;
+        }
+
+        background: url("/wp-content/uploads/2025/09/chevron-1.png") no-repeat center / 100% 100%;
+        width: 20px;
+        height: 11px;
+    }
+}
+
+#shop_page {
+    .jkit-product-categories {
+        .jkit-product-category {
+            margin: 10px 0;
+        }
+    }
+}
+
+#content .checkout-button,
+#place_order {
+    background: var(--e-global-color-primary);
+}
+
+.woocommerce-checkout{
+    .select2-selection{
+        padding: 12px;
+        height: auto;
+        .select2-selection__arrow{
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    }
+}
