@@ -21,14 +21,55 @@ body {
 }
 
 #student_form {
-    .select-caret-down-wrapper {
-        svg {
-            display: none;
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 20px 0;
 
-        background: url("/wp-content/uploads/2025/09/chevron-1.png") no-repeat center / 100% 100%;
-        width: 20px;
-        height: 11px;
+    .input_wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px 0;
+    }
+
+    label {
+        font-weight: 600;
+        font-family: "Inter", Sans-serif;
+        color: var(--e-global-color-fe2ebcb);
+        font-size: 20px;
+    }
+
+    select,
+    input {
+        border: none;
+        outline: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        padding: 16px;
+        border-radius: 0;
+    }
+
+    .select_wrapper {
+        position: relative;
+
+        .arrow {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            width: 0;
+            height: 0;
+            border: solid black;
+            border-width: 0 4px 4px 0;
+            pointer-events: none;
+            transform: rotate(45deg) translateY(-50%);
+            -webkit-transform: rotate(45deg) translateY(-50%);
+            padding: 4px;
+        }
+    }
+
+    .submit_button {
+        width: 100%;
+        font-size: 22px;
+        text-transform: capitalize;
     }
 }
 
@@ -45,13 +86,109 @@ body {
     background: var(--e-global-color-primary);
 }
 
-.woocommerce-checkout{
-    .select2-selection{
+.woocommerce-checkout {
+    .select2-selection {
         padding: 12px;
         height: auto;
-        .select2-selection__arrow{
+
+        .select2-selection__arrow {
             top: 50%;
             transform: translateY(-50%);
+        }
+    }
+}
+
+#checkout_filter {
+    h3 {
+        color: var(--e-global-color-primary)
+    }
+
+    table {
+        border: 1px solid #e5e5e5;
+        margin-bottom: 50px;
+
+        tr {
+            &.sub_total {
+                background: var(--e-global-color-d9dfe68);
+            }
+
+            th,
+            td {
+                border: none;
+                text-align: center;
+                padding: 10px;
+                vertical-align: middle;
+
+                &:first-of-type {
+                    width: 10%;
+                }
+
+                &:nth-child(2) {
+                    width: 50%;
+                    text-align: left;
+                }
+                &:nth-child(3) {
+                    width: 15%;
+                }
+                &:nth-child(4){
+                    width: 15%;
+                }
+                &:last-of-type{
+                    width: 10%;
+                }
+            }
+
+            th {
+                background: var(--e-global-color-d9dfe68);
+                color: var(--e-global-color-primary)
+            }
+
+            td {
+                border-bottom: 1px solid #e5e5e5;
+            }
+
+            input[type="checkbox"] {
+                -moz-appearance: none;
+                -webkit-appearance: none;
+                -o-appearance: none;
+                outline: none;
+                content: none;
+                width: 15px;
+                height: 15px;
+                padding: 0;
+                background: none;
+                border: none;
+                position: relative;
+
+                &:before {
+                    content: "✓";
+                    font-size: 15px;
+                    color: transparent !important;
+                    background: white;
+                    display: block;
+                    width: 15px;
+                    height: 15px;
+                    border: 1px solid var(--e-global-color-primary);
+                    margin-right: 7px;
+                    border-radius: 2px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    line-height: 15px;
+                }
+
+                &:checked:before {
+                    color: var(--e-global-color-primary) !important;
+                }
+            }
+
+            .qty {
+                width: 65px;
+                height: 20px;
+                padding: 15px 5px;
+            }
         }
     }
 }
