@@ -30,12 +30,12 @@ function init_student_form()
     }
 
     foreach ($mother_tongue_slugs as $slug) {
-        $category = get_term_by('slug', $slug, 'product_cat');
-        if ($category) {
+        $cate = get_term_by('slug', $slug, 'product_cat');
+        if ($cate) {
             $mother_tongue_html .= sprintf(
                 '<option value="%s">%s</option>',
-                esc_attr($category->slug),
-                esc_html($category->name)
+                esc_attr($cate->slug),
+                esc_html($cate->name)
             );
         }
     }
@@ -128,7 +128,7 @@ function parse_products_table($category_slug)
     }
 
     $html .= '<h3>' . $term_name . '</h3>';
-    $html .= '<form><table>
+    $html .= '<table class="product-table" data-category="' . esc_attr($category_slug) . '">
         <tr>
             <th>Code</th>
             <th>Item Description</th>
@@ -145,11 +145,10 @@ function parse_products_table($category_slug)
         $html .= '<td>$' . esc_html(($prod->get_sale_price() ? $prod->get_sale_price() : $prod->get_price())) . '</td>';
         $html .= '</tr>';
     }
-    $html .= '</table></form>';
+    $html .= '</table>';
 
     return $html;
 }
-
 
 // function create_woocommerce_product_category() {
 //         $cat_list = [

@@ -23,7 +23,7 @@ body {
 #student_form {
     display: flex;
     flex-direction: column;
-    gap: 20px 0;
+    gap: 15px 0;
 
     .input_wrapper {
         display: flex;
@@ -70,6 +70,11 @@ body {
         width: 100%;
         font-size: 22px;
         text-transform: capitalize;
+    }
+    .elementor-widget-text-editor {
+        p {
+            margin-bottom: 5px;
+        }
     }
 }
 
