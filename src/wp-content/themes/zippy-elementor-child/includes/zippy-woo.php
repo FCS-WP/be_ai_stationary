@@ -47,51 +47,19 @@ add_action('wp_ajax_nopriv_checkout_filter_subtotal', 'calculate_total');
 
 function add_products_to_cart()
 {
-    if (isset($_POST['products']) && is_array($_POST['products'])) {
-        $added_products = [];
-        foreach ($_POST['products'] as $item) {
-            if (isset($item['id']) && isset($item['qty']) && is_numeric($item['id']) && is_numeric($item['qty']) && $item['qty'] > 0) {
-                $cart_item_key = WC()->cart->add_to_cart($item['id'], $item['qty']);
-                if ($cart_item_key) {
-                    $product = wc_get_product($item['id']);
-                    $added_products[] = [
-                        'id' => $item['id'],
-                        'name' => $product ? $product->get_name() : '',
-                        'quantity' => $item['qty'],
-                        'price' => $product ? wc_price($product->get_price()) : '',
-                        'cart_item_key' => $cart_item_key
-                    ];
-                }
+    $cart = new WC_Cart();
+    if (isset($_POST['data']) && is_array($_POST['data'])) {
+        foreach ($_POST['data'] as $id => $qty) {
+            if (is_numeric($id) && is_numeric($qty) && $qty > 0) {
+                $added = $cart->add_to_cart($id, $qty);
             }
         }
-        wp_send_json_success([
-            'message' => 'Products added to cart.',
-            'products' => $added_products
-        ]);
+        wp_send_json_success(['message' => 'Products added to cart.']);
     } else {
         wp_send_json_error('No products provided.');
     }
     wp_die();
 }
 
-add_action('wp_ajax_add_checked_products_to_cart', 'add_products_to_cart');
-add_action('wp_ajax_nopriv_add_checked_products_to_cart', 'add_products_to_cart');
-
-
-
-
-add_filter('woocommerce_checkout_fields', 'custom_override_checkout_fields');
-function custom_override_checkout_fields($fields)
-{
-    unset($fields['billing']['billing_company']);
-    unset($fields['billing']['billing_country']);
-    unset($fields['billing']['billing_address_1']);
-    unset($fields['billing']['billing_address_2']);
-    unset($fields['billing']['billing_city']);
-    unset($fields['billing']['billing_state']);
-    unset($fields['billing']['billing_postcode']);
-
-    return $fields;
-}
-
-
+add_action('wp_ajax_filter_add_to_cart', 'add_products_to_cart');
+add_action('wp_ajax_nopriv_filter_add_to_cart', 'add_products_to_cart');

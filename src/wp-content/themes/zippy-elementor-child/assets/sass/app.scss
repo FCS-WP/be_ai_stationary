@@ -71,6 +71,7 @@ body {
         font-size: 22px;
         text-transform: capitalize;
     }
+
     .elementor-widget-text-editor {
         p {
             margin-bottom: 5px;
@@ -103,7 +104,24 @@ body {
     }
 }
 
+.checkout-filter-container {
+    max-width: 1160px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
 #checkout_filter {
+    display: flex;
+    gap: 0 20px;
+
+    .left {
+        width: 70%;
+    }
+
+    .right {
+        width: 30%;
+    }
+
     h3 {
         color: var(--e-global-color-primary)
     }
@@ -132,13 +150,16 @@ body {
                     width: 50%;
                     text-align: left;
                 }
+
                 &:nth-child(3) {
                     width: 15%;
                 }
-                &:nth-child(4){
+
+                &:nth-child(4) {
                     width: 15%;
                 }
-                &:last-of-type{
+
+                &:last-of-type {
                     width: 10%;
                 }
             }
@@ -195,5 +216,97 @@ body {
                 padding: 15px 5px;
             }
         }
+    }
+    .order-summary{
+        .add-to-cart-btn{
+            border: none;
+        }
+    }
+}
+
+.loading-container {
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1;
+        display: none;
+    }
+
+    .loader {
+        width: 65px;
+        aspect-ratio: 1;
+        position: relative;
+        position: absolute;
+        top: calc(50% - 25px);
+        left: calc(50% - 25px);
+        z-index: 2;
+        display: none;
+
+        &:before,
+        &:after {
+            content: "";
+            position: absolute;
+            border-radius: 50px;
+            box-shadow: 0 0 0 3px inset #fff;
+            animation: l4 2.5s infinite;
+
+        }
+
+        &:after {
+            animation-delay: -1.25s;
+        }
+    }
+
+    &.loading {
+
+        &:before,
+        .loader {
+            display: block;
+        }
+    }
+}
+
+@keyframes l4 {
+    0% {
+        inset: 0 35px 35px 0;
+    }
+
+    12.5% {
+        inset: 0 35px 0 0;
+    }
+
+    25% {
+        inset: 35px 35px 0 0;
+    }
+
+    37.5% {
+        inset: 35px 0 0 0;
+    }
+
+    50% {
+        inset: 35px 0 0 35px;
+    }
+
+    62.5% {
+        inset: 0 0 0 35px;
+    }
+
+    75% {
+        inset: 0 0 35px 35px;
+    }
+
+    87.5% {
+        inset: 0 0 35px 0;
+    }
+
+    100% {
+        inset: 0 35px 35px 0;
     }
 }

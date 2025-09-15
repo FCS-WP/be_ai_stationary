@@ -16,7 +16,7 @@ function init_student_form()
         "p6"
     ];
 
-    $mother_tongue_slugs = ['c-m-edu-tl', 'c-m-edul-ml', 'cm-edu', 'chinese', 'cl-only', 'english', 'exercise-books-compulsory-items', 'foundation-chinese', 'foundation-english', 'foundation-malay', 'foundation-maths', 'foundation-science', 'higher-chinese', 'higher-malay', 'higher-tamil', 'malay', 'maths', 'ml-tl-only', 'optional-items', 'p1'];
+    $mother_tongue_slugs = ['c-m-edu-tl', 'c-m-edul-ml', 'cm-edu', 'chinese', 'cl-only', 'english', 'exercise-books-compulsory-items', 'foundation-chinese', 'foundation-english', 'foundation-malay', 'foundation-maths', 'foundation-science', 'higher-chinese', 'higher-malay', 'higher-tamil', 'malay', 'maths', 'ml-tl-only', 'optional-items'];
 
     foreach ($level_slug as $slug) {
         $category = get_term_by('slug', $slug, 'product_cat');
@@ -140,7 +140,13 @@ function parse_products_table($category_slug)
         $html .= '<tr>';
         $html .= '<td>' . esc_html($prod->get_id()) . '<input type="hidden" name="product[id]" value="' . esc_attr($prod->get_id()) . '"></td>';
         $html .= '<td>' . esc_html($prod->get_name()) . '</td>';
-        $html .= '<td><input type="number" name="product[id]' . esc_attr($prod->get_id()) . '" min="0" value="0" class="qty"></td>';
+        $html .= '<td>' . woocommerce_quantity_input(
+					array(
+						'min_value'   => apply_filters('woocommerce_quantity_input_min', $prod->get_min_purchase_quantity(), $prod),
+						'max_value'   => apply_filters('woocommerce_quantity_input_max', $prod->get_max_purchase_quantity(), $prod),
+						'input_value' => $prod->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
+					)
+				) . '</td>';
         $html .= '<td><input type="checkbox" class="product_select" value="' . esc_attr($prod->get_id()) . '"></td>';
         $html .= '<td>$' . esc_html(($prod->get_sale_price() ? $prod->get_sale_price() : $prod->get_price())) . '</td>';
         $html .= '</tr>';

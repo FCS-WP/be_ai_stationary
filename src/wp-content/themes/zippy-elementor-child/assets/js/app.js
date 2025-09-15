@@ -55,9 +55,10 @@ $("body")
     clearTimeout(subtotal_timeout);
     subtotal_timeout = setTimeout(() => {
       if (subtotal_promise) return;
+      show_loading();
       subtotal_promise = calculate_total(product_table).then(res => {
         subtotal_promise = null;
-
+        hide_loading();
         // Clean previous dynamic rows / product list
         product_table.find(".sub_total").remove();
         $(".cart_total .cart_total_products").remove();
@@ -92,6 +93,7 @@ $("body")
                 bodyRows += `<tr>
                 <td>${escapeHtml(item.name)}</td>
                 <td>x${escapeHtml(item.quantity)}</td>
+                <td>${item.price}</td>
                 </tr>`;
               });
             });
@@ -101,61 +103,23 @@ $("body")
               if (res.data.total) {
                 bodyRows += `<tr class="grand_total_row">
                 <td><strong>Total</strong></td>
-                <td><strong>${res.data.total}</strong></td>
+                <td colspan="2"><strong>${res.data.total}</strong></td>
                 </tr>`;
               }
-              const tableHtml = `
-                <table class="cart_total_products">
-                <thead>
-                  <tr><th>Product</th><th>Qty</th></tr>
-                </thead>
+              let table_html = `
                 <tbody>
                   ${bodyRows}
                   <tr>
-                  <td colspan="2" style="text-align:center;">
+                  <td colspan="3" style="text-align:center;">
                   <button class="add-to-cart-btn">
                     Add to Cart
                   </button>
                   </td>
                   </tr>
                 </tbody>
-                </table>
                 `;
-              // Attach click handler for Add to Cart button
-              setTimeout(() => {
-                $(".add-to-cart-btn").off("click").on("click", function () {
-                  // Gather checked products and quantities
-                  let products = [];
-                  $(".product-table .product_select:checked").each(function () {
-                    let qty = parseInt($(this).closest("tr").find(".qty").val(), 10),
-                      id = parseInt($(this).val(), 10);
-                    if (qty > 0) {
-                      products.push({ id, qty });
-                    }
-                  });
-
-                  if (products.length === 0) return;
-                  console.log(products);
-
-                  // Send AJAX request to add to cart
-                    ajax({
-                    url: "/wp-admin/admin-ajax.php",
-                    type: "POST",
-                    data: {
-                      action: "add_checked_products_to_cart",
-                      products: products
-                    },
-                    success: function (response) {
-                      // Optionally show a success message or update UI
-                      alert(response.data.message);
-                    },
-                    error: function (err) {
-                      console.log(err.message);
-                    }
-                    });
-                });
-              }, 0);
-              $(".cart_total").append(tableHtml);
+              $(".order-summary").find("tbody").remove();
+              $(".order-summary").append(table_html);
             }
           }
         }
@@ -163,6 +127,47 @@ $("body")
         subtotal_promise = null;
       });
     }, 200);
+  })
+  .on("click", ".add-to-cart-btn", function () {
+    let product_table = $(".product-table");
+    let post_data = {};
+    product_table.find(".product_select:checked").each(function () {
+      let qty = parseInt($(this).parents("tr").find(".qty").val(), 10),
+        id = parseInt($(this).val(), 10);
+
+      post_data[id] = qty;
+    });
+
+    if (Object.keys(post_data).length === 0) {
+      alert("Please select at least one product.");
+      return;
+    }
+
+    // Disable button to prevent multiple clicks
+    let button = $(this);
+    button.prop('disabled', true).text('Adding...');
+    show_loading();
+    ajax({
+      url: "/wp-admin/admin-ajax.php",
+      type: 'POST',
+      data: {
+        action: 'filter_add_to_cart',
+        data: post_data
+      }
+    }).then(res => {
+      if (res.success) {
+        hide_loading();
+        // Redirect to cart page
+        window.location.href = "/cart/";
+      } else {
+        alert(res.data || "An error occurred while adding products to the cart.");
+        button.prop('disabled', false).text('Add to Cart');
+      }
+    }).catch(() => {
+      hide_loading();
+      alert("An error occurred while adding products to the cart.");
+      button.prop('disabled', false).text('Add to Cart');
+    });
   });
 
 
@@ -181,7 +186,8 @@ function calculate_total(form) {
       qty: qty
     });
   });
-
+  console.log(post_data);
+  
   return ajax({
     url: "/wp-admin/admin-ajax.php",
     type: 'POST',
@@ -190,4 +196,13 @@ function calculate_total(form) {
       data: post_data
     }
   });
+}
+
+
+function show_loading() {
+  $(".loading-container").addClass('loading');
+}
+
+function hide_loading() {
+  $(".loading-container").removeClass('loading');
 }
