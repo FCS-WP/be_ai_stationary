@@ -11,17 +11,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['student_name'], $_GET['
     $class = sanitize_text_field($_GET['class']);
     $mother_tongue = sanitize_text_field($_GET['mother_tongue']);
     $categories_arr = [$level, $mother_tongue];
-    
+
     // Get cart
     $cart = WC()->cart->get_cart();
-    usort($cart, function($a, $b) {
+    usort($cart, function ($a, $b) {
         return $b['product_id'] - $a['product_id']; // Tăng dần
     });
     ?>
     <div>
-        <div class="checkout-filter-container container">
-            <h2>Student: <?php echo esc_html($student_name); ?></h2>
-            <h3>Class: <?php echo esc_html($class); ?></h3>
+        <div class="banner-header-filter-cart">
+            <div class="checkout-filter-container">
+                <h2>Student: <?php echo esc_html($student_name); ?></h2>
+                <h3>Class: <?php echo esc_html($class); ?></h3>
+            </div>
         </div>
         <div class="checkout-filter-container container" id="checkout_filter">
             <div class="left loading-container">
@@ -51,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['student_name'], $_GET['
                                 <th><input type="checkbox" class="select_all"></th>
                                 <th>Price</th>
                             </tr>
-                            <?php foreach ($products as $prod) { 
+                            <?php foreach ($products as $prod) {
                                 $product_id = $prod->get_id();
                                 // Check if product in cart
                                 $in_cart = false;
@@ -88,7 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['student_name'], $_GET['
                                         ?>
                                     </td>
                                     <td><input type="checkbox" class="product_select" value="<?php echo esc_attr($product_id); ?>" <?php echo $in_cart ? 'checked' : ''; ?>></td>
-                                    <td>$<?php echo esc_html($prod->get_sale_price() ? $prod->get_sale_price() : $prod->get_price()); ?></td>
+                                    <td>$<?php echo esc_html($prod->get_sale_price() ? $prod->get_sale_price() : $prod->get_price()); ?>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </table>
@@ -120,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['student_name'], $_GET['
                                     $product_name = $product->get_name();
                                     $quantity = $cart_item['quantity'];
                                     $price = WC()->cart->get_product_price($product);
-                                    $subtotal = WC()->cart->get_product_subtotal( $product, $quantity );
+                                    $subtotal = WC()->cart->get_product_subtotal($product, $quantity);
                                     ?>
                                     <tr>
                                         <td><?php echo esc_html($product_name); ?></td>
