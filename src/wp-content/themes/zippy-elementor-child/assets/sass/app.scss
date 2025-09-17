@@ -221,6 +221,11 @@ body {
       border: none;
       padding: 12px 25px;
     }
+    .grand_total_row{
+      td:first-of-type{
+        text-align: right;
+      }
+    }
   }
 }
 
