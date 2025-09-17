@@ -94,6 +94,7 @@ $("body")
                 <td>${escapeHtml(item.name)}</td>
                 <td>x${escapeHtml(item.quantity)}</td>
                 <td>${item.price}</td>
+                <td>${item.subtotal}</td>
                 </tr>`;
               });
             });
@@ -102,15 +103,15 @@ $("body")
               // Append grand total row (if provided)
               if (res.data.total) {
                 bodyRows += `<tr class="grand_total_row">
-                <td><strong>Total</strong></td>
-                <td colspan="2"><strong>${res.data.total}</strong></td>
+                <td colspan="3"><strong>Total</strong></td>
+                <td><strong>${res.data.total}</strong></td>
                 </tr>`;
               }
               let table_html = `
                 <tbody>
                   ${bodyRows}
                   <tr>
-                  <td colspan="3" style="text-align:center;">
+                  <td colspan="4" style="text-align:center;">
                   <button class="add-to-cart-btn">
                     Add to Cart
                   </button>
