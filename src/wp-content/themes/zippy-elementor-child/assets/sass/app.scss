@@ -130,6 +130,35 @@ body {
     border: 1px solid #e5e5e5;
     margin-bottom: 50px;
 
+    &.product-table {
+      tr {
+
+        th,
+        td {
+          &:first-of-type {
+            width: 15%;
+          }
+
+          &:nth-child(2) {
+            width: 45%;
+            text-align: left;
+          }
+
+          &:nth-child(3) {
+            width: 15%;
+          }
+
+          &:nth-child(4) {
+            width: 15%;
+          }
+
+          &:last-of-type {
+            width: 10%;
+          }
+        }
+      }
+    }
+
     tr {
       &.sub_total {
         background: var(--e-global-color-d9dfe68);
@@ -141,27 +170,6 @@ body {
         text-align: center;
         padding: 10px;
         vertical-align: middle;
-
-        &:first-of-type {
-          width: 15%;
-        }
-
-        &:nth-child(2) {
-          width: 45%;
-          text-align: left;
-        }
-
-        &:nth-child(3) {
-          width: 15%;
-        }
-
-        &:nth-child(4) {
-          width: 15%;
-        }
-
-        &:last-of-type {
-          width: 10%;
-        }
       }
 
       th {
@@ -172,6 +180,7 @@ body {
       td {
         border-bottom: 1px solid #e5e5e5;
       }
+
       input[type="checkbox"] {
         -moz-appearance: none;
         -webkit-appearance: none;
@@ -216,13 +225,21 @@ body {
       }
     }
   }
+
   .order-summary {
+    tr {
+      th {
+        width: 25%;
+      }
+    }
+
     .add-to-cart-btn {
       border: none;
       padding: 12px 25px;
     }
-    .grand_total_row{
-      td:first-of-type{
+
+    .grand_total_row {
+      td:first-of-type {
         text-align: right;
       }
     }
@@ -269,21 +286,25 @@ body {
   }
 
   &.loading {
+
     &:before,
     .loader {
       display: block;
     }
   }
 }
+
 .shop_table {
   thead {
     background-color: var(--e-global-color-d9dfe68);
+
     tr {
       th {
         color: var(--e-global-color-primary);
       }
     }
   }
+
   tbody {
     tr {
       .product-quantity {
@@ -294,6 +315,7 @@ body {
           }
         }
       }
+
       &:nth-child(2) {
         .actions {
           .coupon {
@@ -301,6 +323,7 @@ body {
               padding: 12px 20px;
               background-color: var(--e-global-color-primary);
               color: var(--e-global-color-5997b1e);
+
               &:hover {
                 background-color: var(--e-global-color-5997b1e);
                 color: var(--e-global-color-primary);
@@ -312,9 +335,11 @@ body {
     }
   }
 }
+
 #coupon_code {
   width: 130px !important;
 }
+
 @keyframes l4 {
   0% {
     inset: 0 35px 35px 0;
