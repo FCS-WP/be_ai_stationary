@@ -4,23 +4,34 @@ function init_student_form()
 {
     ob_start();
 
+
+    // Get Product Category 
+    $args = array(
+        'taxonomy' => 'product_cat',
+        'orderby' => 'name',
+        'show_count' => 0,
+        'pad_counts' => 0,
+        'hierarchical' => 1,
+        'title_li' => '',
+        'hide_empty' => 0
+    );
+
+    // Get All Product Category
+    // $all_categories = get_categories($args);
+    // foreach ($all_categories as $category){
+    //     $level_slug[] = $category -> slug;
+    // }
     $level_html = "";
-    $mother_tongue_html = "";
-
-    $level_slug = [
-        "p1",
-        "p2",
-        "p3",
-        "p4",
-        "p5",
-        "p6"
-    ];
-
-    $mother_tongue_slugs = ['c-m-edu-tl', 'c-m-edul-ml', 'cm-edu', 'chinese', 'cl-only', 'english', 'exercise-books-compulsory-items', 'foundation-chinese', 'foundation-english', 'foundation-malay', 'foundation-maths', 'foundation-science', 'higher-chinese', 'higher-malay', 'higher-tamil', 'malay', 'maths', 'ml-tl-only', 'optional-items'];
-
-    foreach ($level_slug as $slug) {
-        $category = get_term_by('slug', $slug, 'product_cat');
-        if ($category) {
+    $level_parent_category = get_term_by('slug', 'level', 'product_cat');
+    if ($level_parent_category) {
+        $args = array(
+            'taxonomy' => 'product_cat',
+            'parent' => $level_parent_category->term_id,
+            'orderby' => 'name',
+            'hide_empty' => 0,
+        );
+        $level_child_categories = get_categories($args);
+        foreach ($level_child_categories as $category) {
             $level_html .= sprintf(
                 '<option value="%s">%s</option>',
                 esc_attr($category->slug),
@@ -29,19 +40,26 @@ function init_student_form()
         }
     }
 
-    foreach ($mother_tongue_slugs as $slug) {
-        $cate = get_term_by('slug', $slug, 'product_cat');
-        if ($cate) {
-            $mother_tongue_html .= sprintf(
-                '<option value="%s">%s</option>',
-                esc_attr($cate->slug),
-                esc_html($cate->name)
-            );
+    $subject_html = '';
+    $subject_parent_category = get_term_by('slug', 'subject', 'product_cat');
+    if ($subject_parent_category) {
+        $args = array(
+            'taxonomy' => 'product_cat',
+            'parent' => $subject_parent_category->term_id,
+            'orderby' => 'name',
+            'hide_empty' => 0,
+        );
+        $subject_child_categories = get_categories($args);
+        foreach ($subject_child_categories as $category) {
+              $mother_tongue_html .= sprintf(
+                    '<option value="%s">%s</option>',
+                    esc_attr($category->slug),
+                    esc_html($category->name)
+                );
         }
     }
-
     ?>
-    <form id="student_form" method="post" action="/checkout-filter">
+    <form id="student_form" method="GET" action="/checkout-filter">
         <div class="input_wrapper">
             <label for="student-name">Student Name *</label>
             <input type="text" id="student-name" name="student_name" required placeholder="as per school's record">
@@ -141,12 +159,12 @@ function parse_products_table($category_slug)
         $html .= '<td>' . esc_html($prod->get_id()) . '<input type="hidden" name="product[id]" value="' . esc_attr($prod->get_id()) . '"></td>';
         $html .= '<td>' . esc_html($prod->get_name()) . '</td>';
         $html .= '<td>' . woocommerce_quantity_input(
-					array(
-						'min_value'   => apply_filters('woocommerce_quantity_input_min', $prod->get_min_purchase_quantity(), $prod),
-						'max_value'   => apply_filters('woocommerce_quantity_input_max', $prod->get_max_purchase_quantity(), $prod),
-						'input_value' => $prod->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
-					)
-				) . '</td>';
+            array(
+                'min_value' => apply_filters('woocommerce_quantity_input_min', $prod->get_min_purchase_quantity(), $prod),
+                'max_value' => apply_filters('woocommerce_quantity_input_max', $prod->get_max_purchase_quantity(), $prod),
+                'input_value' => $prod->get_min_purchase_quantity(), // WPCS: CSRF ok, input var ok.
+            )
+        ) . '</td>';
         $html .= '<td><input type="checkbox" class="product_select" value="' . esc_attr($prod->get_id()) . '"></td>';
         $html .= '<td>$' . esc_html(($prod->get_sale_price() ? $prod->get_sale_price() : $prod->get_price())) . '</td>';
         $html .= '</tr>';
