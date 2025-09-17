@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['student_name'], $_GET['
     // Get cart
     $cart = WC()->cart->get_cart();
     usort($cart, function($a, $b) {
-        return $b['product_id'] - $a['product_id']; // Tăng dần
+        return $b['product_id'] - $a['product_id']; // Order by ID - ASC
     });
     ?>
     <div>
