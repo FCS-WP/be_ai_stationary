@@ -1,8 +1,5 @@
 <?php
 
-use enshrined\svgSanitize\Sanitizer;
-use Jeg\Util\Sanitize;
-
 function init_student_form()
 {
     ob_start();
