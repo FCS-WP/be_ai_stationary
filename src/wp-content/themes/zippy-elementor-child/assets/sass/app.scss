@@ -138,6 +138,7 @@ body {
       width: 35%;
       height: -webkit-fill-available;
     }
+    padding: 80px 0px;
   }
   h3 {
     color: var(--e-global-color-primary);
@@ -351,28 +352,6 @@ body {
 
 #coupon_code {
   width: 130px !important;
-}
-.banner-header-filter-cart {
-  display: flex;
-  height: 200px;
-  background-color: var(--e-global-color-primary);
-  align-items: center;
-  margin: 30px 0px;
-  @include tablet {
-    height: 250px;
-  }
-  @include desktop {
-    height: 300px;
-  }
-}
-.checkout-filter-container {
-  padding: auto 0;
-  width: 100%;
-  align-items: center;
-  h2,
-  h3 {
-    color: var(--e-global-color-5997b1e);
-  }
 }
 @keyframes l4 {
   0% {

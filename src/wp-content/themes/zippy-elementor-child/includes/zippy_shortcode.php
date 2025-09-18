@@ -1,5 +1,8 @@
 <?php
 
+use enshrined\svgSanitize\Sanitizer;
+use Jeg\Util\Sanitize;
+
 function init_student_form()
 {
     ob_start();
@@ -15,12 +18,6 @@ function init_student_form()
         'title_li' => '',
         'hide_empty' => 0
     );
-
-    // Get All Product Category
-    // $all_categories = get_categories($args);
-    // foreach ($all_categories as $category){
-    //     $level_slug[] = $category -> slug;
-    // }
     $level_html = "";
     $level_parent_category = get_term_by('slug', 'level', 'product_cat');
     if ($level_parent_category) {
@@ -40,7 +37,7 @@ function init_student_form()
         }
     }
 
-    $subject_html = '';
+    $mother_tongue_html ='';
     $subject_parent_category = get_term_by('slug', 'subject', 'product_cat');
     if ($subject_parent_category) {
         $args = array(
@@ -174,46 +171,22 @@ function parse_products_table($category_slug)
     return $html;
 }
 
-// function create_woocommerce_product_category() {
-//         $cat_list = [
-//             'English',
-//             'Foundation English',
-//             'Maths',
-//             'Foundation Maths',
-//             'Science',
-//             'Foundation Science',
-//             'Social Studies',
-//             'Chinese',
-//             'Higher Chinese',
-//             'Foundation Chinese',
-//             'Malay',
-//             'Higher Malay',
-//             'Foundation Malay',
-//             'C & M Edul ML',
-//             'Tamil',
-//             'Higher Tamil',
-//             'C & M EDU TL',
-//             'PE',
-//             'CL Only',
-//             'ML/TL Only',
-//             'Optional Items',
-//             'C&M Edu',
-//             "Exercise Books & Compulsory Items"
-//         ];
-//         $category_slugs = [];
-//         foreach ($cat_list as $cat_name) {
-//             if (!term_exists($cat_name, 'product_cat')) {
-//                 $result = wp_insert_term($cat_name, 'product_cat');
-//                 if (!is_wp_error($result) && isset($result['term_id'])) {
-//                     $term = get_term($result['term_id'], 'product_cat');
-//                     if ($term && !is_wp_error($term)) {
-//                         // Return or use the slug as needed
-//                         $category_slugs[] = $term->slug;
-//                     }
-//                 }
-//             }
-//         }
-//         // You can return or use the $category_slugs array as needed
-//         return $category_slugs;
-//     }
-// add_action( 'admin_init', 'create_woocommerce_product_category' );
+function get_student_name(){
+    if (isset($_GET['student_name'])){
+        $name_value = isset($_GET['student_name']) ? $_GET['student_name'] : '';
+        return esc_html($name_value);
+    } else{
+        return "Ivalid Student Name";
+    }
+}
+add_shortcode('get_student_name','get_student_name');
+
+function get_student_class(){
+    if(isset($_GET['class'])){
+        $class_value = sanitize_text_field($_GET['class'])? $_GET['class'] : '';
+        return esc_html($class_value);
+    }else{
+        return "Ivalid Class";
+    }
+}
+add_shortcode('get_student_class','get_student_class');
